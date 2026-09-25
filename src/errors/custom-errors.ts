@@ -39,8 +39,8 @@ class TooManyRequestsError extends AppError{
     }
 }
 
-module.exports = {AppError}
-module.exports = {NotFoundError}
-module.exports = {ValidationError}
-module.exports = {ConflictError}
-module.exports = {TooManyRequestsError}
+module.exports = {AppError,
+NotFoundError,
+ValidationError,
+ConflictError,
+TooManyRequestsError}
