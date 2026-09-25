@@ -1,10 +1,10 @@
 import type e = require("express")
-import nodeHttp = require("node:http")
+import type nodeHttp = require("node:http")
 
 const express = require("express")
 const app = express()
 
-module.exports.securityHeaders = function (req: Request, res: Response & nodeHttp.ServerResponse, next: e.NextFunction) {
+module.exports.securityHeaders = function (req: e.Request, res: e.Response & nodeHttp.ServerResponse, next: e.NextFunction) {
     res.removeHeader("X-Powered-By")
     res.setHeader(
         "Content-Security-Policy",
