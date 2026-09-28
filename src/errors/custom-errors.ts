@@ -1,4 +1,5 @@
 class AppError extends Error{
+    public readonly name: string
     public readonly status: number
     public readonly code: string
     public readonly details: unknown
@@ -25,6 +26,20 @@ class NotFoundError extends AppError{
 }
 
 class ValidationError extends AppError{
+    constructor(zodError: any) {
+        super(
+            "Ошибка валидации",
+            {
+                status: 400,
+                code: "validation_failed",
+                details: zodError.issues.map((i: any) => ({
+                    filed: i.path.join(".") || ("корень"),
+                    code: i.code,
+                    message: i.message
+                }))
+            }
+        )
+    }
 }
 
 class ConflictError extends AppError{
