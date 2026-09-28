@@ -24,41 +24,59 @@ const colors = {
 winston.addColors(colors)
 
 const consoleFormat = winston.format.combine(
-    winston.format.timestamp({format: "YYYY-MM-DD HH:ss:ms"}),
-    winston.format.colorize({all: true}),
-    winston.format.printf(
-        (info) => `${info.timestamp} ${info.level} ${info.message}`
-    )
+    winston.format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
+    winston.format.printf((info) => {
+        const { timestamp, level, message, ...meta } = info;
+        const metaString = Object.values(meta).join(", ")
+        return `${timestamp} ${level}: ${metaString}`;
+    })
 )
 
-const fileFormat = winston.format.combine(
-    winston.format.timestamp({format: "YYYY-MM-DD HH:ss:ms"}),
+const fileJsonFormat = winston.format.combine(
+    winston.format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
+    winston.format.uncolorize(),
     winston.format.json()
 )
 
-const transport = [
-    new winston.transports.Console(),
-    new winston.transports.File({
-        filename: "./../../logs/error.log",
-        level: "error"
-    }),
-    new winston.transports.File({filename: "./../../logs/all_logs.log"})
-]
+const fileLogFormat = winston.format.combine(
+    winston.format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
+    winston.format.uncolorize(),
+    winston.format.printf((info) => {
+        const { timestamp, level, message, ...meta } = info;
+        const metaString = Object.values(meta).join(", ")
+
+        return `${timestamp} ${level}: ${metaString}`;
+    })
+)
+
+let transport
 
 if (process.env.NODE_ENV !== "dev") {
-    transport.push(
+    transport = [
         new winston.transports.File({
-            filename: "./../../logs/warns-and-errors.json",
+            filename: "C:/Users/FamilyT/Desktop/Repo from GitHub/CaseLabJS-case-2/logs/warns-and-errors.json",
             level: "warning",
-            format: fileFormat
+            format: fileJsonFormat
         })
-    )
+    ]
+} else {
+    transport = [
+        new winston.transports.Console({format: winston.format.combine(consoleFormat, winston.format.colorize({ all: true }))}),
+        new winston.transports.File({
+            filename: "C:/Users/FamilyT/Desktop/Repo from GitHub/CaseLabJS-case-2/logs/error.log",
+            level: "error",
+            format: fileLogFormat
+        }),
+        new winston.transports.File({
+            filename: "C:/Users/FamilyT/Desktop/Repo from GitHub/CaseLabJS-case-2/logs/all_logs.log", 
+            format: fileLogFormat
+        })
+    ]
 }
 
 const logger = winston.createLogger({
     level: level(),
     levels: levels,
-    format: consoleFormat,
     transports: transport
 })
 
