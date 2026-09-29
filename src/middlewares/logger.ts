@@ -26,9 +26,14 @@ winston.addColors(colors)
 const consoleFormat = winston.format.combine(
     winston.format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
     winston.format.printf((info) => {
-        const { timestamp, level, message, ...meta } = info;
-        const metaString = Object.values(meta).join(", ")
-        return `${timestamp} ${level}: ${metaString}`;
+        const { timestamp, level, message, requestId, ...meta } = info;
+        const metaString = Object.values(meta).map((it) => {
+            if (typeof it === "object" ) {
+                return JSON.stringify(it)
+            }
+            return it
+        }).join(", ")
+        return `${timestamp} ${level}: ReqID:${requestId} ${message} ${metaString}`;
     })
 )
 
@@ -42,10 +47,16 @@ const fileLogFormat = winston.format.combine(
     winston.format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
     winston.format.uncolorize(),
     winston.format.printf((info) => {
-        const { timestamp, level, message, ...meta } = info;
-        const metaString = Object.values(meta).join(", ")
+        const { timestamp, level, message, requestId, ...meta } = info;
+        const metaString = Object.values(meta).map((it) => {
+            if (typeof it === "object" ) {
+                return JSON.stringify(it)
+            }
+            return it
+        }).join(", ")
 
-        return `${timestamp} ${level}: ${metaString}`;
+
+        return `${timestamp} ${level}: ReqID:${requestId} ${message} ${metaString}`;
     })
 )
 
