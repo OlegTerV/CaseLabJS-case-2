@@ -32,7 +32,7 @@ class ValidationError extends AppError{
             {
                 status: 400,
                 code: "validation_failed",
-                details: zodError.issues.map((i: any) => ({
+                details: zodError.issues?.map((i: any) => ({
                     filed: i.path.join(".") || ("корень"),
                     code: i.code,
                     message: i.message
