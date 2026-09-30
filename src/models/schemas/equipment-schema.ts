@@ -11,11 +11,11 @@ const bodySchema_post = z.strictObject({
     serialNumber: z.string(),
     location: locationSchema,
     status: z.enum(["operational", "maintenance", "fault", "decommissioned"]),
-    installedAt: z.string()
+    installedAt: z.string().datetime()
 })
 
 const paramsSchema = z.strictObject({
-    equipmentId: z.string().guid()
+    equipmentId: z.string().guid().optional() 
 })
 
 const querySchema_get = z.strictObject({
@@ -32,25 +32,25 @@ const bodySchema_patch = bodySchema_post.partial()
 
 const getEquipmentSchema = {
     params: paramsSchema.optional(),
-    query: querySchema_get.optional(),
-    body: z.undefined()
+    query: querySchema_get.optional().catch({}),
+    body: z.object({}).strict().optional() 
 }
 
 const postEquipmentSchema = {
-    params: z.undefined(),
-    query: z.undefined(),
+    params: z.object({}).strict(),
+    query: z.object({}).strict(),
     body: bodySchema_post
 }
 
 const deleteEquipmentSchema = {
     params: paramsSchema,
-    query: z.undefined(),
-    body: z.undefined()
+    query: z.object({}).strict(),
+    body: z.object({}).strict()
 }
 
 const patchEquipmentSchema = {
-    params: paramsSchema,
-    query: z.undefined(),
+    params: paramsSchema.optional(),
+    query: z.object({}).strict(),
     body: bodySchema_patch
 }
 
