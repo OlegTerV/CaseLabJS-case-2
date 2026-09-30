@@ -8,10 +8,12 @@ const {NotFoundError} = require("./errors/custom-errors")
 const logger = require("./middlewares/logger")
 const {setRequestId} = require("./middlewares/set-request-id")
 const allowedOrigins = process.env.ALLOWED_ORIGIN?.split(",")
+const apiRoute = require("./routes/index")
 const limitter = rateLimit({
     windowMs: 15* 60 * 1000,
     max: 100
 })
+
 app.use(securityHeaders)
 app.use(cors({
     origin: (
@@ -30,7 +32,7 @@ app.use(limitter)
 app.use(express.json({limit: "100kb"}))
 app.use(express.urlencoded({extended: true, limit: "100kb"}))
 app.use(setRequestId)
-//routes
+app.use("/api", apiRoute)
 
 
 app.use((req: any, res: any, next: any) => {

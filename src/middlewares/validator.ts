@@ -5,15 +5,17 @@ module.exports.validation = function (schema: any) {
     return (req: e.Request, res: e.Response, next: e.NextFunction) => {
         (req as any).valid = {}
 
-        const keys = ["body", "query", "params"] as const //списал у Gemini, мой вариант обхода проблемы, связанной с типизацией req, представлен ниже в комментарии (остойный вариант)
+        const keys = ["body", "query", "params"] as const //списал у Gemini, мой вариант обхода проблемы, связанной с типизацией req, представлен ниже в комментарии (отстойный вариант)
 
         for (const part of keys) {
             if (!schema[part]) continue
-
+            
             const result = schema[part].safeParse(req[part])
             if (!result.success) {
-                return next(new ValidationError(`Ошибка валидации: ${result.error}`))
+                return next(new ValidationError(result.error))
             }
+
+            (req as any).valid[part] = result
         }
         next()
     }
