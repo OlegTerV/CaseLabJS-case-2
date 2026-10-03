@@ -7,14 +7,22 @@ const {
     deleteEquipmentSchema, 
     patchEquipmentSchema
 } = require("./../models/schemas/equipment-schema")
-const {getAll, getOneById, createNew, updateItem, deleteItem} = require("./../controllers/equipment.controller")
+const {
+    getAll, 
+    getOneById, 
+    createNew, 
+    updateItem, 
+    deleteItem, 
+    getWeatherForecastForTheWork, 
+    getRequestsForEquipment
+} = require("./../controllers/equipment.controller")
 
 router.get("/", validation(getEquipmentSchema), getAll)
 router.post("/", validation(postEquipmentSchema), createNew)
 router.get("/:equipmentId", validation(getEquipmentSchema), getOneById)
 router.patch("/:equipmentId", validation(patchEquipmentSchema), updateItem)
 router.delete("/:equipmentId", validation(deleteEquipmentSchema), deleteItem)
-//router.get("/:id/requests")  // TODO
-//router.get("/:id/weather") // TODO
+router.get("/:equipmentId/requests", validation(getEquipmentSchema), getRequestsForEquipment)
+router.get("/:equipmentId/weather", validation(getEquipmentSchema), getWeatherForecastForTheWork)
 
 module.exports = router
