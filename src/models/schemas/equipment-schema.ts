@@ -15,7 +15,7 @@ const bodySchema_post = z.strictObject({
 })
 
 const paramsSchema = z.strictObject({
-    equipmentId: z.string().guid().optional() 
+    equipmentId: z.string().guid().optional(),
 })
 
 const querySchema_get = z.strictObject({
@@ -26,13 +26,14 @@ const querySchema_get = z.strictObject({
     sort: z.string().optional(),
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().default(15),
+    daysCount: z.coerce.number().int().min(1).max(100).default(1)
 })
 
 const bodySchema_patch = bodySchema_post.partial()
 
 const getEquipmentSchema = {
     params: paramsSchema.optional(),
-    query: querySchema_get.optional().catch({}),
+    query: querySchema_get.optional(),
     body: z.object({}).strict().optional() 
 }
 
@@ -45,7 +46,7 @@ const postEquipmentSchema = {
 const deleteEquipmentSchema = {
     params: paramsSchema,
     query: z.object({}).strict(),
-    body: z.object({}).strict()
+    body: z.object({}).strict().optional() 
 }
 
 const patchEquipmentSchema = {
