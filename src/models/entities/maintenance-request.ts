@@ -9,7 +9,7 @@ interface MaintenanceRequest{
     description: string // до 2000 символов
     priority: typeof priority
     status: typeof status  //(по умолчанию new)
-    plannedAt: string  // ISO-дата-время, необязательное
+    plannedAt?: string  // ISO-дата-время, необязательное
     createdAt: string // ISO-дата-время (проставляется сервером)
     updatedAt: string // ISO-дата-время (проставляется сервером)
 }
