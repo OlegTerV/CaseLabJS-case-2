@@ -19,8 +19,10 @@ const paramsSchema = z.strictObject({
 })
 
 const querySchema_get = z.strictObject({
-    status: z.enum(["operational", "maintenance", "fault", "decommissioned"]).optional(),
-    type: z.enum(["turbine", "inverter", "sensor", "substation"]).optional(),
+    //status: z.enum(["operational", "maintenance", "fault", "decommissioned"]).optional(),
+    //type: z.enum(["turbine", "inverter", "sensor", "substation"]).optional(),
+    status: z.string().optional(),
+    type: z.string().optional(),
     serialNumber: z.string().optional(),
     installedAt: z.string().optional(),
     sort: z.string().optional(),
