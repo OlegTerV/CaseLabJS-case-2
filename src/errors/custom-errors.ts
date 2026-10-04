@@ -54,8 +54,22 @@ class TooManyRequestsError extends AppError{
     }
 }
 
+class InvalidInputError extends AppError{
+    constructor (message: string) {
+        super(message, {status: 400, code: "invalid input"})
+    }
+}
+
+class RequestTimedOut extends AppError{
+    constructor () {
+        super("Превышено время ожидания!", {status: 504, code: "request timed out"})
+    }
+}
+
 module.exports = {AppError,
 NotFoundError,
 ValidationError,
 ConflictError,
-TooManyRequestsError}
+TooManyRequestsError,
+InvalidInputError,
+RequestTimedOut}
