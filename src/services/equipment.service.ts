@@ -7,12 +7,15 @@ const {getWeatherForCity} = require("./api-client")
 module.exports.getItemsList = function(queryParams: any) {
     const start = queryParams.limit * (queryParams.page - 1)
     const end = queryParams.limit * queryParams.page
-
-    const quipmentsCount = getElementsCount()
+    const filterStatus = queryParams.status
+    const filterType = queryParams.type
+    const filterSerialNumber = queryParams.serialNumber
+    const filterInstalledAt = queryParams.installedAt
+    const quipmentsCount = getElementsCount(filterStatus, filterType, filterSerialNumber, filterInstalledAt)
     if (start > quipmentsCount) throw new InvalidInputError(`Для limit = ${queryParams.limit} доступно максимум ${Math.ceil(quipmentsCount/queryParams.limit)} страниц`)
 
     const result = {
-        equipments: getAllElements(start, end),
+        equipments: getAllElements(start, end, filterStatus, filterType, filterSerialNumber, filterInstalledAt),
         page: queryParams.page,
         limit: queryParams.limit
     }
