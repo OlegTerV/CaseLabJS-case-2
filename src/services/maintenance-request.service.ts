@@ -7,11 +7,16 @@ const logger = require("./../middlewares/logger")
 module.exports.getAllItems = function (queryParams: any) {
     const start = queryParams.limit * (queryParams.page - 1)
     const end = queryParams.limit * queryParams.page
-    const requestsCount = getElementsCount()
+    const filterStatus = queryParams.status
+    const filterPriority = queryParams.priority
+    const filterEquipmentId = queryParams.equipmentId
+    const filterPlannedAt = queryParams.plannedAt
+
+    const requestsCount = getElementsCount(filterStatus, filterPriority, filterEquipmentId, filterPlannedAt)
     if (start > requestsCount) throw new InvalidInputError(`Для limit = ${queryParams.limit} доступно максимум ${Math.ceil(requestsCount/queryParams.limit)} страниц`)
 
     const result = {
-        maintenanceRequests: getAll(start, end),
+        maintenanceRequests: getAll(start, end, filterStatus, filterPriority, filterEquipmentId, filterPlannedAt),
         page: queryParams.page,
         limit: queryParams.limit
     }
