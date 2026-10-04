@@ -22,8 +22,10 @@ const paramsSchema = z.strictObject({
 })
 
 const querySchema_get = z.strictObject({
-    status: z.enum(["new", "in_progress", "done", "rejected"]).optional(),
-    priority: z.enum(["low", "medium", "high", "critical"]).optional(),
+    //status: z.enum(["new", "in_progress", "done", "rejected"]).optional(),
+    //priority: z.enum(["low", "medium", "high", "critical"]).optional(),
+    status: z.string().optional(),
+    priority: z.string().optional(),
     equipmentId: z.string().optional(),
     plannedAt: z.string().optional(),
     sort: z.string().optional(),
